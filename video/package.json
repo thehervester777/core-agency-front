@@ -1,0 +1,18 @@
+{
+  "name": "core-agency-ad",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Core Agency — Bangla ad film (HTML/GSAP scenes rendered frame-by-frame to a 60 fps MP4)",
+  "scripts": {
+    "render": "node render.mjs",
+    "audio": "python3 audio.py"
+  },
+  "dependencies": {
+    "@fontsource-variable/aleo": "5.3.0",
+    "@fontsource-variable/noto-serif-bengali": "5.3.0",
+    "gsap": "3.13.0"
+  },
+  "devDependencies": {
+    "playwright": "*"
+  }
+}
