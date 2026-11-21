@@ -307,8 +307,8 @@
       };
     });
 
-    /* ---------- desktop: pinned hero → iris → philosophy ---------- */
-    mm.add(CA.mq.desktop, () => {
+    /* ---------- every screen: pinned hero → iris → philosophy ---------- */
+    mm.add(CA.mq.pinned, () => {
       intro.classList.add('is-pinned');
       gsap.set(philWords, { opacity: 0.14 });
       gsap.set(phil, { autoAlpha: 0 });
@@ -336,7 +336,7 @@
           start: 'top top',
           end: () => '+=' + Math.round(H() * 3.2),
           pin: true,
-          scrub: true,
+          scrub: CA.scrub,
           anticipatePin: 1,
           invalidateOnRefresh: true,
           onUpdate: () => {
@@ -372,16 +372,16 @@
       };
     });
 
-    /* ---------- mobile: no pin, words light up on scroll ---------- */
-    mm.add(CA.mq.mobile, () => {
+    /* ---------- short landscape screens: no pin, words light up on scroll ---------- */
+    mm.add(CA.mq.flow, () => {
       gsap.set(philWords, { opacity: 0.14 });
       gsap.to(philWords, {
         opacity: 1, ease: 'none', stagger: { amount: 1 },
-        scrollTrigger: { trigger: '.philosophy__text', start: 'top 82%', end: 'bottom 52%', scrub: true },
+        scrollTrigger: { trigger: '.philosophy__text', start: 'top 82%', end: 'bottom 52%', scrub: CA.scrub },
       });
       const stopVis = CA.visible(hero, (v) => state.setMode(v ? 'play' : 'pause'), { margin: '0px' });
       // light parallax on the device
-      gsap.to(dev, { y: -40, ease: 'none', scrollTrigger: { trigger: stage, start: 'top bottom', end: 'bottom top', scrub: true } });
+      gsap.to(dev, { y: -40, ease: 'none', scrollTrigger: { trigger: stage, start: 'top bottom', end: 'bottom top', scrub: CA.scrub } });
       return () => stopVis();
     });
 
