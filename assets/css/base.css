@@ -169,6 +169,7 @@ html.is-loading { overflow: hidden; }
   fill: none; stroke: currentColor;
   stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round;
 }
+.icon--fill { fill: currentColor; stroke: none; } /* brand glyphs (WhatsApp) are solid shapes, not strokes */
 .lm-ring { fill: none; stroke: currentColor; stroke-width: 3.2; stroke-linecap: round; stroke-dasharray: 52 17.2; }
 .lm-dot { fill: var(--accent); }
 
