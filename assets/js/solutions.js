@@ -245,15 +245,20 @@
         return () => { stops.forEach((s) => s()); sec.classList.remove('is-pinned'); fx.forEach((f) => f.pause()); };
       });
 
-      /* industries · mobile: native swipe, animate what is on screen */
+      /* industries · mobile: native swipe, card entrance + ambient art */
       mm.add(CA.mq.mobile, () => {
         const io = new IntersectionObserver((entries) => {
           entries.forEach((e) => {
             const i = cards.indexOf(e.target);
             if (i < 0) return;
-            if (e.isIntersecting) fx[i].play(); else fx[i].pause();
+            if (e.isIntersecting) {
+              e.target.classList.add('is-entered');
+              fx[i].play();
+            } else {
+              fx[i].pause();
+            }
           });
-        }, { threshold: 0.35 });
+        }, { threshold: 0.15 });
         cards.forEach((c) => io.observe(c));
         return () => { io.disconnect(); fx.forEach((f) => f.pause()); };
       });
@@ -281,6 +286,24 @@
           .to(shade, { opacity: 0.2 }, 0);
       });
       return () => shades.forEach((s) => s.remove());
+    });
+
+    /* use cases · mobile: staggered scroll entrance */
+    mm.add(CA.mq.mobile, () => {
+      ucards.forEach((card, i) => {
+        if (CA.isPast(card)) return;
+        gsap.set(card, { autoAlpha: 0, y: 56 });
+        ScrollTrigger.create({
+          trigger: card, start: 'top 92%', once: true,
+          onEnter: () => {
+            if (CA.isPast(card)) { gsap.set(card, { clearProps: 'transform,opacity,visibility' }); return; }
+            gsap.to(card, {
+              autoAlpha: 1, y: 0, duration: 1.2, ease: 'expo.out', delay: i * 0.05,
+              onComplete: () => gsap.set(card, { clearProps: 'transform,opacity,visibility' }),
+            });
+          },
+        });
+      });
     });
 
     /* use cases · widgets run only while on screen (IntersectionObserver sees sticky cards correctly) */

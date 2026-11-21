@@ -284,3 +284,14 @@
   .srow__bar { display: none; }
   .wg { min-height: 360px; }
 }
+
+/* ---------- mobile entrances ---------- */
+@media (max-width: 1023.98px) and (prefers-reduced-motion: no-preference) {
+  /* each icard slides up once as it enters the horizontal scroll viewport */
+  .icard {
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity 0.65s var(--e-out), transform 0.65s var(--e-out);
+  }
+  .icard.is-entered { opacity: 1; transform: translateY(0); }
+}
