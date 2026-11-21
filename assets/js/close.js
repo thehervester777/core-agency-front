@@ -209,7 +209,27 @@
     });
   };
 
+  /* ---------- floating chat button ---------- */
+  const initFab = () => {
+    const fab = $('[data-fab]');
+    if (!fab) return;
+    if (!waNumber) { fab.hidden = true; return; }
+    const hello = `Hi ${CFG.siteName || 'Core Agency'}, I'd like to know more about your POS.`;
+    fab.href = `https://wa.me/${waNumber}?text=${encodeURIComponent(hello)}`;
+    // step aside once the footer comes into view, where it would sit on top of "Back to top".
+    // (Measured from the end of the page content: on desktop the footer sits fixed behind the page,
+    // so the footer itself always counts as "on screen".)
+    const last = $('.chapter--last');
+    if (last) {
+      ScrollTrigger.create({
+        trigger: last, start: 'bottom bottom',
+        onToggle: (self) => fab.classList.toggle('is-away', self.isActive),
+      });
+    }
+  };
+
   CA.init.close = (mm) => {
+    initFab();
     initForm();
     initFooter(mm);
 
