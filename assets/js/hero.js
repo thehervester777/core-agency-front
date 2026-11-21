@@ -168,7 +168,6 @@
     const device = $('[data-device]', intro);
     const canvas = $('[data-rings]', intro);
     const chips = $$('[data-chip]', intro);
-    const eyebrow = $('.hero__eyebrow', intro);
     const lead = $('.hero__lead', intro);
     const ctas = $$('.hero__cta > *', intro);
     const header = $('.header');
@@ -187,7 +186,7 @@
 
       // initial hidden state for the entrance (the preloader is covering the page)
       gsap.set(titleWords, { yPercent: 118 });
-      gsap.set([eyebrow, lead, ...ctas], { autoAlpha: 0, y: 26 });
+      gsap.set([lead, ...ctas], { autoAlpha: 0, y: 26 });
       gsap.set(devIn, { y: 170, autoAlpha: 0, rotateX: 14, transformPerspective: 1600, transformOrigin: '50% 100%' });
       gsap.set(chips, { autoAlpha: 0, scale: 0.82 });
       gsap.set(header, { yPercent: -100 });
@@ -200,7 +199,6 @@
       if (CA.reduced) return gsap.timeline();
       const tl = gsap.timeline({ defaults: { ease: 'expo.out' } });
       tl.to(header, { yPercent: 0, duration: 1, ease: 'power3.out' }, 0.2)
-        .to(eyebrow, { autoAlpha: 1, y: 0, duration: 1 }, 0.05)
         .to(titleWords, { yPercent: 0, duration: 1.35, stagger: 0.055 }, 0.1)
         .to([lead, ...ctas], { autoAlpha: 1, y: 0, duration: 1.1, stagger: 0.09 }, 0.62)
         .to(rings.intro, { s: 1, a: 1, duration: 2.4, ease: 'power3.out' }, 0.2)
@@ -209,7 +207,7 @@
         .add(() => {
           // drop the temporary transforms again so nothing stays promoted for no reason
           gsap.set(titleWords, { clearProps: 'transform' });
-          gsap.set([eyebrow, lead, ...ctas], { clearProps: 'transform,opacity,visibility' });
+          gsap.set([lead, ...ctas], { clearProps: 'transform,opacity,visibility' });
           gsap.set(devIn, { clearProps: 'transform,opacity,visibility' });
           state.introDone = true;
           applyLoop();
