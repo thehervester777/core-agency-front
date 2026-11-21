@@ -167,6 +167,23 @@ html.is-loading { overflow: hidden; }
 .is-ink .serif {
   background: linear-gradient(130deg, var(--accent) 0%, var(--accent-hi) 60%, var(--accent) 100%);
 }
+/* After CA.splitWords runs inside a .serif span, the text nodes move into .wi children so
+   background-clip: text has nothing to clip on the container — clear it and re-apply the
+   gradient on each .wi which does carry direct text. */
+.serif:has(.w) {
+  background: none;
+  -webkit-text-fill-color: initial;
+}
+.serif .wi {
+  background: linear-gradient(130deg, var(--accent-fg) 0%, var(--accent) 55%, var(--accent-hi) 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.chapter--ink .serif .wi,
+.is-ink .serif .wi {
+  background: linear-gradient(130deg, var(--accent) 0%, var(--accent-hi) 60%, var(--accent) 100%);
+}
 
 .lead {
   font-size: clamp(1.04rem, 1.22vw, 1.26rem);
