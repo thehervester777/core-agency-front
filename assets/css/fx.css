@@ -62,11 +62,34 @@
 .field label { transition: color 0.3s var(--e-out); }
 .field:focus-within label { color: var(--ink); }
 
+/* ---------- scroll progress bar ---------- */
+.fx-progress {
+  position: fixed; top: 0; left: 0; right: 0; height: 2.5px; z-index: 201;
+  pointer-events: none; will-change: transform;
+  background: linear-gradient(90deg, var(--accent) 0%, var(--accent-hi) 50%, var(--accent) 100%);
+  transform-origin: 0 50%; transform: scaleX(0);
+  box-shadow: 0 0 10px rgba(47,107,235, 0.55);
+}
+
+/* ---------- cursor centre dot ---------- */
+.fx-cursor__center {
+  position: absolute; left: -4px; top: -4px; width: 8px; height: 8px;
+  border-radius: 50%; background: var(--accent); pointer-events: none;
+  transform: scale(var(--cd, 1));
+  transition: transform 0.3s var(--e-out), opacity 0.3s var(--e-out);
+  opacity: 0;
+}
+.fx-cursor.is-on .fx-cursor__center { opacity: 1; }
+.fx-cursor.is-link .fx-cursor__center { --cd: 0; opacity: 0; }
+.fx-cursor.is-hidden .fx-cursor__center { opacity: 0; }
+.fx-cursor.is-press .fx-cursor__center { --cd: 1.5; transition-duration: 0.12s, 0.12s; }
+
 /* ---------- touch / reduced motion: none of the pointer effects exist ---------- */
 @media (hover: none), (pointer: coarse), (prefers-reduced-motion: reduce) {
   .fx-cursor { display: none; }
 }
 @media (prefers-reduced-motion: reduce) {
+  .fx-progress { display: none; }
   .field, .field label { transition: none; }
   .field:focus-within { transform: none; }
   .chapter--curtain { box-shadow: none; }

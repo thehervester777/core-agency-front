@@ -38,7 +38,7 @@
       const el = document.createElement('div');
       el.className = 'fx-cursor';
       el.setAttribute('aria-hidden', 'true');
-      el.innerHTML = '<span class="fx-cursor__stretch"><span class="fx-cursor__ring"></span></span>';
+      el.innerHTML = '<span class="fx-cursor__center"></span><span class="fx-cursor__stretch"><span class="fx-cursor__ring"></span></span>';
       document.body.appendChild(el);
       const stretch = el.firstElementChild;
 
@@ -419,7 +419,56 @@
     });
   };
 
+  /* ---------- scroll progress bar ---------- */
+  const setupProgress = () => {
+    const bar = document.createElement('div');
+    bar.className = 'fx-progress';
+    bar.setAttribute('aria-hidden', 'true');
+    document.body.appendChild(bar);
+    const set = gsap.quickSetter(bar, 'scaleX');
+    ScrollTrigger.create({
+      start: 0, end: 'max',
+      onUpdate: (self) => set(self.progress),
+    });
+  };
+
+  /* ---------- stat number counters ----------
+     Each .stat__num counts up from zero to its display value when it scrolls into view.
+     The original text is restored exactly on completion so copy, screen-readers and
+     copy-paste all see the real value after the animation finishes. */
+  const setupCounter = () => {
+    if (CA.reduced) return;
+    const els = $$('.stat__num');
+    if (!els.length) return;
+    els.forEach((el) => {
+      const full = el.textContent.trim();
+      const m = full.match(/([\d,]+(?:\.\d+)?)/);
+      if (!m) return;
+      const numStr = m[1];
+      const target = parseFloat(numStr.replace(/,/g, ''));
+      if (!target || target < 2) return;
+      const isFloat = numStr.includes('.');
+      const dp = isFloat ? numStr.split('.')[1].length : 0;
+      const idx = full.indexOf(numStr);
+      const pre = full.slice(0, idx);
+      const suf = full.slice(idx + numStr.length);
+      ScrollTrigger.create({
+        trigger: el.closest('.stat') || el, start: 'top 85%', once: true,
+        onEnter: () => {
+          if (CA.isPast(el)) return;
+          const obj = { v: 0 };
+          gsap.to(obj, {
+            v: target, duration: 2.2, ease: 'power3.out',
+            onUpdate() { el.textContent = pre + (isFloat ? obj.v.toFixed(dp) : Math.round(obj.v)) + suf; },
+            onComplete: () => { el.textContent = full; },
+          });
+        },
+      });
+    });
+  };
+
   CA.init.fx = (mm) => {
+    safe('progress', () => setupProgress());
     safe('cursor', () => setupCursor(mm));
     safe('hero depth', () => setupHeroDepth(mm));
     safe('tilt', () => setupTilt(mm));
@@ -427,6 +476,7 @@
     safe('cards', () => setupCards(mm));
     safe('ticks', () => setupTicks(mm));
     safe('stats', () => setupStats(mm));
+    safe('counter', () => setupCounter());
     safe('ripple', () => setupRipple());
     safe('wordmark', () => setupWordmark(mm));
   };

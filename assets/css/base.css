@@ -155,7 +155,17 @@ html.is-loading { overflow: hidden; }
   letter-spacing: -0.011em;
   font-size: 1em;
   line-height: 0.95;
-  color: var(--accent-text);
+  /* gradient text – vivid on light surfaces */
+  background: linear-gradient(130deg, var(--accent-fg) 0%, var(--accent) 55%, var(--accent-hi) 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: var(--accent-text); /* plain-colour fallback */
+}
+/* On dark surfaces shift to the lighter end of the accent ramp */
+.chapter--ink .serif,
+.is-ink .serif {
+  background: linear-gradient(130deg, var(--accent) 0%, var(--accent-hi) 60%, var(--accent) 100%);
 }
 
 .lead {
@@ -176,7 +186,13 @@ html.is-loading { overflow: hidden; }
   width: 7px; height: 7px; border-radius: 50%;
   background: var(--accent);
   box-shadow: 0 0 0 4px rgba(47,107,235, 0.18);
+  animation: dot-pulse 2.6s ease-in-out infinite;
 }
+@keyframes dot-pulse {
+  0%, 100% { box-shadow: 0 0 0 4px rgba(47,107,235, 0.18); }
+  50%       { box-shadow: 0 0 0 7px rgba(47,107,235, 0.07); }
+}
+@media (prefers-reduced-motion: reduce) { .eyebrow__dot { animation: none; } }
 
 .tag {
   display: inline-flex; align-items: center;
